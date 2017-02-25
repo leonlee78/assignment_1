@@ -47,10 +47,10 @@ def login():
 		query = ''' SELECT * FROM users WHERE login = %s '''
 		cursor.execute(query, (login, ))
 		row = cursor.fetchone()
-		id = row[0]
+		userId = row[0]
 		stored_pwd = row[2]
 		if password == stored_pwd:
-			return render_template("main.html", title="Login Success!")
+			return redirect(url_for('user_ui', id = userId))
 		else:
 			return render_template("main.html", title="Login Failed! Password Incorrect")
 	else:

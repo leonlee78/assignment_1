@@ -1,0 +1,30 @@
+{% extends "base.html" %}
+{% block content %}
+
+<div class='info'> {{info_msg if info_msg != None}} </div>
+{% for id in userId %}
+<form action="{{url_for('upload_new_image', id = id)}}" method="post">
+	<input type="submit" value="New Image">
+</form>
+{% endfor %}
+
+<table />
+<thread>
+	<th>Original</th>
+	<th>Transform_1</th>
+	<th>Transform_2</th>
+	<th>Transform_3</th>
+</thread>
+
+{% for row in cursor %}
+<tr>
+	<td>{{ row[2]}}</td>
+	<td>{{ row[3]}}</td>
+	<td>{{ row[4]}}</td>
+	<td>{{ row[5]}}</td>
+</tr>
+{% endfor %}
+
+</table>
+
+{% endblock %}
