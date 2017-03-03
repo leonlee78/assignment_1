@@ -3,7 +3,7 @@
 
 <div class='info'> {{info_msg if info_msg != None}} </div>
 {% for id in userId %}
-<form action="{{url_for('upload_new_image', id = id)}}" method="post">
+<form action="{{url_for('upload', id = id)}}" method="get">
 	<input type="submit" value="New Image">
 </form>
 {% endfor %}
@@ -18,10 +18,10 @@
 
 {% for row in cursor %}
 <tr>
-	<td>{{ row[2]}}</td>
-	<td>{{ row[3]}}</td>
-	<td>{{ row[4]}}</td>
-	<td>{{ row[5]}}</td>
+	<td><img src="https://s3.amazonaws.com/ece1779b/{{row[2]}}" alt="image" class="thumbnail"/></td>
+	<td><img src="https://s3.amazonaws.com/ece1779b/{{row[3]}}" alt="image" class="thumbnail"/></td>
+	<td><img src="https://s3.amazonaws.com/ece1779b/{{row[4]}}" alt="image" class="thumbnail"/></td>
+	<td><img src="https://s3.amazonaws.com/ece1779b/{{row[5]}}" alt="image" class="thumbnail"/></td>
 </tr>
 {% endfor %}
 
