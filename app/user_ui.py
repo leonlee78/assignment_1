@@ -2,6 +2,9 @@ from flask import render_template, redirect, url_for, request, g
 from app import webapp
 
 import mysql.connector
+import boto3
+
+s3 = boto3.resource('s3')
 
 from app.config import db_config
 
@@ -45,12 +48,30 @@ def user_ui(id):
 	
 	if row:
 		#Images exists
-		return render_template("user_ui/view.html",title="Welcome!", userId = userId)
+		query = ''' SELECT * FROM images WHERE usersId = %s '''
+
+		cursor.execute(query, (id, ))
+
+		return render_template("user_ui/view.html",title="Welcome!", userId = userId, cursor=cursor)
 	else:
 		#No Images
 		return render_template("user_ui/view.html", title="Welcome!",userId = userId, info_msg = info_msg)
 
-@webapp.route('/user_ui/upload/<int:id>', methods=['POST'])
+@webapp.route('/user_ui/upload/<int:id>', methods=['GET'])
 #page for uploading an image and perform conversions
+def upload(id):
+	return render_template("user_ui/upload.html", title="Upload Image", id = id)
+
+@webapp.route('/user_ui/upload/<int:id>', methods=['POST'])
+#upload image
 def upload_new_image(id):
-	return 0
+	f = request.files['new_file']
+	if f.filename == '':
+		abort(404)
+	s3.Object("ece1779b",f.filename).put(Body=f)
+	cnx = get_db()
+	cursor = cnx.cursor()
+	query = ''' INSERT INTO images (usersId,key1,key2,key3,key4) values (%s, %s, %s, %s, %s) '''
+	cursor.execute(query, (id, f.filename, f.filename, f.filename, f.filename))
+	cnx.commit()
+	return redirect(url_for('user_ui', id=id))
