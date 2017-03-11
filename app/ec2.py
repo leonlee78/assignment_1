@@ -3,12 +3,10 @@ from datetime import datetime, timedelta
 from operator import itemgetter
 
 
-class ec2:
-    def __init__():
-        ec2 = boto3.resource('ec2')
-        cloudwatch = boto3.client('cloudwatch')
-        imageId = "ami-baf632ac"
-
+class EC2:
+    ec2 = boto3.resource('ec2')
+    cloudwatch = boto3.client('cloudwatch')     
+    imageId = "ami-baf632ac"
 
     def create_ec2_instances(self,minCount, maxCount):
         imageId = self.imageId
@@ -96,7 +94,7 @@ class ec2:
             count = count +1
         self.stop_ec2_instances(instance_list)
 
-     def listInstance(self, state):  
+    def listInstance(self, state):  
         ec2 = self.ec2
         instances = ec2.instances.filter(
             Filters = [{'Name': 'instance-state-name', 'Values': [state]}])
@@ -105,19 +103,12 @@ class ec2:
         for instance in instances:
             instance_list.append(instance.id)
         return instance_list
-        
-    '''
-    def delete_image_s3():
-        #TODO:
 
-    def delete_db_value():
-        #TODO
-    '''
-
-    if __name__== "__main__":
-        #list_ec2_instances()
-        #get_cpu_utilization("i-01e26623dacc9c5b2")
-        is_above_threshold(0.8)#10%
+if __name__== "__main__":
+    #list_ec2_instances()
+    #get_cpu_utilization("i-01e26623dacc9c5b2")
+    e = EC2()
+    e.is_above_threshold(0.9)#10%
 
 '''def resize_instance(numInstance):
     #create more instances
